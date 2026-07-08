@@ -3,8 +3,10 @@
 > **Divine Attire for Radha Krishna & Laddu Gopal** — Complete MERN Stack Application
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-8-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![MongoDB](https://img.shields.io/badge/Mongoose-8.24-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Express](https://img.shields.io/badge/Express-4.22-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![Razorpay](https://img.shields.io/badge/Razorpay-Payments-0C2451?logo=razorpay&logoColor=white)](https://razorpay.com/)
 
 ---
@@ -40,7 +42,8 @@ khatuwala-full/
 │   │
 │   ├── server.js                     # Express app entry point
 │   ├── package.json                  # Backend dependencies
-│   └── .env                          # Environment variables (not committed)
+│   ├── .env                          # Environment variables (not committed)
+│   └── .env.example                  # Environment variables template
 │
 ├── frontend/                         # React + Vite Frontend
 │   ├── public/
@@ -101,9 +104,11 @@ khatuwala-full/
 │   │
 │   ├── index.html
 │   ├── package.json                  # Frontend dependencies
-│   ├── vite.config.js                # Vite configuration
+│   ├── vite.config.js                # Vite configuration (reads env)
 │   ├── tailwind.config.js            # Tailwind theme
-│   └── postcss.config.js
+│   ├── postcss.config.js
+│   ├── .env                          # Frontend env variables (not committed)
+│   └── .env.example                  # Frontend env variables template
 │
 └── README.md                         # This file
 ```
@@ -233,31 +238,37 @@ The backend implements **multi-layered security** to protect user data, prevent 
 | Package | Version | Purpose |
 |---|---|---|
 | Node.js | 18+ | Runtime |
-| Express.js | 4.18 | Web framework |
-| MongoDB (Mongoose) | 8.3 | Database & ODM |
+| Express.js | 4.22 | Web framework |
+| MongoDB (Mongoose) | 8.24 | Database & ODM |
 | jsonwebtoken | 9.0 | JWT authentication |
 | bcryptjs | 2.4 | Password hashing |
-| helmet | latest | HTTP security headers (CSP, HSTS, etc.) |
-| express-mongo-sanitize | latest | NoSQL injection prevention |
-| xss-clean | latest | XSS attack prevention |
+| helmet | 8.2 | HTTP security headers (CSP, HSTS, etc.) |
+| express-mongo-sanitize | 2.2 | NoSQL injection prevention |
+| xss-clean | 0.1 | XSS attack prevention |
 | Cloudinary | 1.41 | Cloud image storage |
 | multer + multer-storage-cloudinary | 1.4 / 4.0 | File upload handling |
 | Razorpay | 2.9 | Payment gateway |
-| Nodemailer | 6.9 | Email service |
-| express-rate-limit | 7.3 | API rate limiting (global + per-route) |
+| Nodemailer | 6.10 | Email service |
+| express-rate-limit | 7.5 | API rate limiting (global + per-route) |
 | express-async-handler | 1.2 | Async error handling |
-| dotenv | 16.4 | Environment variables |
+| dotenv | 16.6 | Environment variables |
+| cors | 2.8 | Cross-origin resource sharing |
+| nodemon (dev) | 3.1 | Auto-restart on file changes |
 
 ### **Frontend**
 | Package | Version | Purpose |
 |---|---|---|
 | React | 18.3 | UI library |
-| Vite | 5.2 | Build tool & dev server |
-| React Router | 6.23 | Client-side routing |
+| React DOM | 18.3 | React DOM renderer |
+| Vite | 5.4 | Build tool & dev server |
+| React Router | 6.30 | Client-side routing |
 | Tailwind CSS | 3.4 | Utility-first CSS |
-| Axios | 1.7 | HTTP client |
-| React Hot Toast | 2.4 | Toast notifications |
+| Axios | 1.18 | HTTP client |
+| React Hot Toast | 2.6 | Toast notifications |
 | Lucide React | 0.383 | Icon library |
+| PostCSS | 8.5 | CSS processing |
+| Autoprefixer | 10.5 | CSS vendor prefixing |
+| @vitejs/plugin-react | 4.7 | Vite React plugin |
 
 ---
 
@@ -279,9 +290,12 @@ cd backend
 
 # Install dependencies
 npm install
+
+# Create .env from template
+cp .env.example .env
 ```
 
-**Create `.env` file** with the following variables:
+**Edit the `.env` file** with your actual values:
 
 ```env
 # MongoDB
@@ -351,8 +365,17 @@ cd frontend
 # Install dependencies
 npm install
 
+# Create .env from template
+cp .env.example .env
+
 # Start dev server
 npm run dev
+```
+
+The `.env` file contains:
+
+```env
+VITE_API_URL=http://localhost:5000/api
 ```
 
 Frontend running at: `http://localhost:5173`
