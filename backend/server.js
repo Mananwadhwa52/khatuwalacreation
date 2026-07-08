@@ -25,8 +25,13 @@ app.use('/api/contact', rateLimit({
 }));
 
 // ── CORS (hardened) ──
+const allowedOrigins = [
+  process.env.FRONTEND_URL,          // https://mananwadhwa.in (Live Domain)
+  'https://www.mananwadhwa.in',      // Safe side ke liye www version
+  'http://localhost:5173'            // Local development ke liye
+];
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
