@@ -32,7 +32,7 @@ export default function Footer() {
           <div>
             <h4 className="font-body text-[10px] font-bold tracking-[0.2em] uppercase text-gold mb-4">Shop</h4>
             <div className="flex flex-col gap-2.5">
-              {['radha-krishna','laddu-gopal','accessories','puja-items'].map(c => (
+              {['radha-krishna','laddu-gopal','accessories','puja-items','khatu-shyam-baba'].map(c => (
                 <Link key={c} to={`/products?category=${c}`} className="font-body text-xs opacity-65 hover:opacity-100 hover:text-gold transition capitalize">{c.replace('-',' ')}</Link>
               ))}
               <Link to="/products" className="font-body text-xs opacity-65 hover:opacity-100 hover:text-gold transition">All Products</Link>

@@ -9,6 +9,7 @@ const categories = [
   { title: 'Laddu Gopal',   value: 'laddu-gopal',   desc: 'Size 0 to 10 — All Seasons',      color: 'from-amber-100 to-yellow-50', accent: '#8d4f11' },
   { title: 'Accessories',   value: 'accessories',   desc: 'Crowns, Flutes, Swings & More',   color: 'from-teal-100 to-cyan-50',  accent: '#002c2c' },
   { title: 'Puja Items',    value: 'puja-items',    desc: 'Diyas, Incense & Ritual Items',   color: 'from-purple-100 to-violet-50', accent: '#3b0764' },
+  { title: 'Khatu Shyam Baba', value: 'khatu-shyam-baba', desc: 'Idols, Poshaks & Devotional Items', color: 'from-orange-100 to-amber-50', accent: '#9a3412' },
 ]
 
 const testimonials = [
@@ -134,7 +135,7 @@ export default function HomePage() {
           <span className="section-label">Our Collections</span>
           <h2 className="section-title">Shop by Devotion</h2>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {categories.map(cat => (
             <Link key={cat.value} to={`/products?category=${cat.value}`}
               className={`group relative h-72 bg-gradient-to-br ${cat.color} rounded-xl overflow-hidden border border-gold/15 card-hover flex flex-col justify-end p-6`}>

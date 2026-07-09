@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema({
   description: { type: String, required: true },
   price:       { type: Number, required: true, min: 0 },
   mrp:         { type: Number },          // original price (for discount display)
-  category:    { type: String, required: true, enum: ['radha-krishna','laddu-gopal','accessories','puja-items'] },
+  category:    { type: String, required: true, enum: ['radha-krishna','laddu-gopal','accessories','puja-items','khatu-shyam-baba'] },
   subcategory: { type: String, trim: true },
   images:      [{ url: String, public_id: String }],
   badges:      [String],

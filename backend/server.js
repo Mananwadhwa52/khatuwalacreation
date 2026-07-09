@@ -26,9 +26,12 @@ app.use('/api/contact', rateLimit({
 
 // ── CORS (hardened) ──
 const allowedOrigins = [
-  process.env.FRONTEND_URL,          // https://mananwadhwa.in (Live Domain)
-  'https://www.mananwadhwa.in',      // Safe side ke liye www version
-  'http://localhost:5173'            // Local development ke liye
+  process.env.FRONTEND_URL,          // From env (should be https://mananwadhwa.in on Render)
+  'https://mananwadhwa.in',          // Live Domain (hardcoded as safety net)
+  'https://www.mananwadhwa.in',      // www version
+  'https://khatuwalacreation.onrender.com', // Render backend itself
+  'http://localhost:5173',           // Local development
+  'http://localhost:5000',           // Local backend
 ];
 app.use(cors({
   origin: allowedOrigins,

@@ -9,6 +9,7 @@ const categories = [
   { label: 'Laddu Gopal',   value: 'laddu-gopal' },
   { label: 'Accessories',   value: 'accessories' },
   { label: 'Puja Items',    value: 'puja-items' },
+  { label: 'Khatu Shyam Baba', value: 'khatu-shyam-baba' },
 ]
 
 export default function Navbar() {

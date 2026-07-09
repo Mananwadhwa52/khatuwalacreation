@@ -3,7 +3,7 @@ import { Plus, Edit2, Trash2, X, Upload, Star } from 'lucide-react'
 import api from '../../utils/api'
 import toast from 'react-hot-toast'
 
-const CATS = ['radha-krishna','laddu-gopal','accessories','puja-items']
+const CATS = ['radha-krishna','laddu-gopal','accessories','puja-items','khatu-shyam-baba']
 const EMPTY = { name:'', description:'', price:'', mrp:'', category:'radha-krishna', subcategory:'', badges:'', sizes:'', inStock:true, featured:false, stockCount:'' }
 
 export default function AdminProducts() {
