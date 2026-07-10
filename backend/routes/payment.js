@@ -34,10 +34,19 @@ router.post('/apply-coupon', asyncHandler(async (req, res) => {
 }));
 
 // Create Razorpay order
-router.post('/create-order', asyncHandler(async (req, res) => {
+router.post('/create-order', protect, asyncHandler(async (req, res) => {
   const { items, shippingAddress, guestEmail, couponCode, paymentMethod } = req.body;
+  const Product = require('../models/Product');
 
-  const itemsPrice = items.reduce((s, i) => s + i.price * i.quantity, 0);
+  // Verify prices from database to prevent frontend manipulation
+  let itemsPrice = 0;
+  const verifiedItems = [];
+  for (const item of items) {
+    const product = await Product.findById(item.product);
+    if (!product) return res.status(404).json({ success: false, message: `Product not found: ${item.name}` });
+    itemsPrice += product.price * item.quantity;
+    verifiedItems.push({ ...item, price: product.price });
+  }
   const shippingPrice = itemsPrice >= 999 ? 0 : 99;
   let discountAmount = 0;
 
@@ -54,9 +63,9 @@ router.post('/create-order', asyncHandler(async (req, res) => {
 
   // Create DB order first
   const order = await Order.create({
-    user: req.headers.authorization ? req.user?._id : undefined,
+    user: req.user._id,
     guestEmail,
-    items, shippingAddress,
+    items: verifiedItems, shippingAddress,
     itemsPrice, shippingPrice, discountAmount, totalPrice,
     couponCode, paymentMethod: paymentMethod || 'razorpay',
   });

@@ -14,7 +14,19 @@ export default function CheckoutPage() {
   const navigate = useNavigate()
 
   const [step, setStep] = useState(1) // 1=address, 2=payment
-  const [address, setAddress] = useState({ fullName: user?.name || '', phone: '', line1: '', line2: '', city: '', state: '', pincode: '' })
+  
+  const savedAddresses = user?.addresses || []
+  const defaultAddr = savedAddresses.find(a => a.isDefault) || savedAddresses[0]
+  
+  const [address, setAddress] = useState({ 
+    fullName: defaultAddr?.fullName || user?.name || '', 
+    phone: defaultAddr?.phone || '', 
+    line1: defaultAddr?.line1 || '', 
+    line2: defaultAddr?.line2 || '', 
+    city: defaultAddr?.city || '', 
+    state: defaultAddr?.state || '', 
+    pincode: defaultAddr?.pincode || '' 
+  })
   const [paymentMethod, setPaymentMethod] = useState('razorpay')
   const [couponCode, setCouponCode] = useState('')
   const [couponApplied, setCouponApplied] = useState(null)
@@ -129,6 +141,20 @@ export default function CheckoutPage() {
             {step === 1 && (
               <div className="bg-cream rounded-xl border border-gold/20 p-6 shadow-sm">
                 <h2 className="font-display text-xl font-bold text-primary mb-6">Shipping Address</h2>
+                {savedAddresses.length > 0 && (
+                  <div className="mb-6">
+                    <label className="font-body text-xs font-bold uppercase tracking-widest text-muted block mb-2">Saved Addresses</label>
+                    <div className="flex flex-col gap-3">
+                      {savedAddresses.map(addr => (
+                        <div key={addr._id} onClick={() => setAddress({ fullName: addr.fullName, phone: addr.phone, line1: addr.line1, line2: addr.line2 || '', city: addr.city, state: addr.state, pincode: addr.pincode })} className="p-3 border border-gray-200 bg-white rounded-lg cursor-pointer hover:border-gold transition">
+                          <p className="font-body text-sm font-bold text-primary">{addr.fullName} <span className="font-normal text-muted">— {addr.phone}</span></p>
+                          <p className="font-body text-xs text-muted mt-1">{addr.line1}{addr.line2 ? ', ' + addr.line2 : ''}, {addr.city}, {addr.state} - {addr.pincode}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 mb-4 font-body text-sm text-center text-muted">OR ENTER NEW ADDRESS</div>
+                  </div>
+                )}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="font-body text-xs font-bold uppercase tracking-widest text-muted block mb-1.5">Full Name *</label>

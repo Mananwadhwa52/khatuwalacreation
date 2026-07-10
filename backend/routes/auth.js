@@ -5,7 +5,8 @@ const rateLimit = require('express-rate-limit');
 const asyncHandler = require('express-async-handler');
 const User    = require('../models/User');
 const { protect, adminOnly, superAdminOnly } = require('../middleware/auth');
-
+const crypto  = require('crypto');
+const { sendMail, passwordResetHtml } = require('../utils/email');
 const genToken = (id, role) => jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '7d' });
 
 // ── Auth-specific rate limiter (brute-force protection) ──
@@ -98,6 +99,38 @@ router.post('/address', protect, asyncHandler(async (req, res) => {
   res.json({ success: true, addresses: user.addresses });
 }));
 
+// Update address
+router.put('/address/:addressId', protect, asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const addr = user.addresses.id(req.params.addressId);
+  if (!addr) return res.status(404).json({ success: false, message: 'Address not found' });
+  Object.assign(addr, req.body);
+  if (req.body.isDefault) user.addresses.forEach(a => { if (a._id.toString() !== req.params.addressId) a.isDefault = false; });
+  await user.save();
+  res.json({ success: true, addresses: user.addresses });
+}));
+
+// Delete address
+router.delete('/address/:addressId', protect, asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const addr = user.addresses.id(req.params.addressId);
+  if (!addr) return res.status(404).json({ success: false, message: 'Address not found' });
+  addr.deleteOne();
+  await user.save();
+  res.json({ success: true, addresses: user.addresses });
+}));
+
+// Set default address
+router.put('/address/:addressId/default', protect, asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const addr = user.addresses.id(req.params.addressId);
+  if (!addr) return res.status(404).json({ success: false, message: 'Address not found' });
+  user.addresses.forEach(a => a.isDefault = false);
+  addr.isDefault = true;
+  await user.save();
+  res.json({ success: true, addresses: user.addresses });
+}));
+
 // Wishlist toggle
 router.post('/wishlist/:productId', protect, asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
@@ -107,6 +140,48 @@ router.post('/wishlist/:productId', protect, asyncHandler(async (req, res) => {
   else user.wishlist.push(pid);
   await user.save();
   res.json({ success: true, wishlist: user.wishlist });
+}));
+
+// ── Password Reset ──
+router.post('/forgot-password', authLimiter, asyncHandler(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    // Return success to avoid email enumeration
+    return res.status(200).json({ success: true, message: 'If an account exists, a reset link was sent' });
+  }
+
+  const resetToken = crypto.randomBytes(20).toString('hex');
+  user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+  user.resetPasswordExpire = Date.now() + 30 * 60 * 1000; // 30 mins
+  await user.save();
+
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+  await sendMail({
+    to: user.email,
+    subject: 'Password Reset – Khatu Walas Creation',
+    html: passwordResetHtml(user.name, resetUrl),
+  });
+
+  res.status(200).json({ success: true, message: 'Reset link sent to your email' });
+}));
+
+router.post('/reset-password/:token', asyncHandler(async (req, res) => {
+  const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+
+  if (!user) return res.status(400).json({ success: false, message: 'Invalid or expired token' });
+  if (req.body.password.length < 8)
+    return res.status(400).json({ success: false, message: 'Password must be at least 8 characters' });
+
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+  await user.save();
+
+  res.status(200).json({ success: true, message: 'Password reset successful!' });
 }));
 
 // ══════════════════════════════════════════════

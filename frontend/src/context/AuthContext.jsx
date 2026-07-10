@@ -36,7 +36,18 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('kw_token'); localStorage.removeItem('kw_user'); setUser(null)
   }
 
-  return <AuthContext.Provider value={{ user, loading, login, register, logout, setUser }}>
+  const refreshUser = async () => {
+    try {
+      const { data } = await api.get('/auth/me')
+      setUser(data.user)
+      localStorage.setItem('kw_user', JSON.stringify(data.user))
+    } catch (e) {
+      console.error('Failed to refresh user', e)
+    }
+  }
+
+
+  return <AuthContext.Provider value={{ user, loading, login, register, logout, setUser, refreshUser }}>
     {children}
   </AuthContext.Provider>
 }

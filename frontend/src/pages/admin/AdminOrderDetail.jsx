@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Package, User, MapPin, CreditCard } from 'lucide-react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { ArrowLeft, Package, User, MapPin, CreditCard, Trash2 } from 'lucide-react'
 import api from '../../utils/api'
 import toast from 'react-hot-toast'
 
@@ -8,6 +8,7 @@ const STATUSES = ['placed','confirmed','processing','shipped','delivered','cance
 
 export default function AdminOrderDetail() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [order, setOrder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState(false)
@@ -33,6 +34,19 @@ export default function AdminOrderDetail() {
     } catch (e) {
       toast.error(e.response?.data?.message || 'Failed to update')
     } finally { setUpdating(false) }
+  }
+
+  const deleteOrder = async () => {
+    if (!confirm('Are you sure you want to permanently delete this cancelled order?')) return
+    setUpdating(true)
+    try {
+      await api.delete(`/orders/${id}`)
+      toast.success('Order deleted')
+      navigate('/admin/orders')
+    } catch (e) {
+      toast.error(e.response?.data?.message || 'Failed to delete')
+      setUpdating(false)
+    }
   }
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-2 border-gold border-t-primary rounded-full animate-spin"/></div>
@@ -150,6 +164,16 @@ export default function AdminOrderDetail() {
               </button>
             </div>
           </div>
+
+          {order.orderStatus === 'cancelled' && (
+            <div className="bg-red-50 rounded-xl border border-red-100 p-6 text-center">
+              <h3 className="font-body text-sm font-bold text-red-800 mb-2">Delete Order</h3>
+              <p className="font-body text-xs text-red-600 mb-4">This action is permanent and cannot be undone.</p>
+              <button onClick={deleteOrder} disabled={updating} className="btn-primary bg-red-600 hover:bg-red-700 w-full text-sm py-2.5 flex items-center justify-center gap-2">
+                <Trash2 size={15}/> {updating ? 'Deleting...' : 'Delete Order'}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

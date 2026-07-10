@@ -5,11 +5,11 @@ import api from '../utils/api'
 import ProductCard from '../components/product/ProductCard'
 
 const categories = [
-  { title: 'Radha Krishna', value: 'radha-krishna', desc: 'Poshaks, Shringar & Jewellery Sets', color: 'from-rose-100 to-pink-50', accent: '#570000' },
-  { title: 'Laddu Gopal',   value: 'laddu-gopal',   desc: 'Size 0 to 10 — All Seasons',      color: 'from-amber-100 to-yellow-50', accent: '#8d4f11' },
-  { title: 'Accessories',   value: 'accessories',   desc: 'Crowns, Flutes, Swings & More',   color: 'from-teal-100 to-cyan-50',  accent: '#002c2c' },
-  { title: 'Puja Items',    value: 'puja-items',    desc: 'Diyas, Incense & Ritual Items',   color: 'from-purple-100 to-violet-50', accent: '#3b0764' },
-  { title: 'Khatu Shyam Baba', value: 'khatu-shyam-baba', desc: 'Idols, Poshaks & Devotional Items', color: 'from-orange-100 to-amber-50', accent: '#9a3412' },
+  { title: 'Radha Krishna', value: 'radha-krishna', desc: 'Poshaks, Shringar & Jewellery Sets', color: 'from-rose-100 to-pink-50', accent: '#570000' , imageurl: 'https://i.ibb.co/DPkgMHZx/file-000000007f847208ada30b449c72a0f1.png' },
+  { title: 'Laddu Gopal',   value: 'laddu-gopal',   desc: 'Size 0 to 10 — All Seasons',      color: 'from-amber-100 to-yellow-50', accent: '#8d4f11' , imageurl: 'https://i.ibb.co/gMngmcBQ/file-00000000b024720896937019d17cf461.png ' },
+  { title: 'Accessories',   value: 'accessories',   desc: 'Crowns, Flutes, Swings & More',   color: 'from-teal-100 to-cyan-50',  accent: '#002c2c', imageurl: 'https://i.ibb.co/VYt3fFJs/file-000000008cc872089a2fb7a7fbbdf1a7.png ' },
+  { title: 'Puja Items',    value: 'puja-items',    desc: 'Diyas, Incense & Ritual Items',   color: 'from-purple-100 to-violet-50', accent: '#3b0764', imageurl: 'https://i.ibb.co/81gsr1M/file-0000000068ac72089454ff1afa2e4d4f.png' },
+  { title: 'Khatu Shyam Baba', value: 'khatu-shyam-baba', desc: 'Idols, Poshaks & Devotional Items', color: 'from-orange-100 to-amber-50', accent: '#9a3412', imageurl: 'https://i.ibb.co/C3D1ykBd/IMG-20260709-223701-png.png' },
 ]
 
 const testimonials = [
@@ -65,31 +65,7 @@ export default function HomePage() {
           <div className="relative hidden md:block">
             <div className="absolute inset-[-16px] border border-gold/25 rounded-2xl pointer-events-none"/>
             <div className="bg-gradient-to-br from-amber-100 to-rose-50 rounded-2xl p-8 flex items-center justify-center h-[560px] relative overflow-hidden">
-              <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px,#570000 1px,transparent 0)', backgroundSize: '20px 20px' }}/>
-              <svg width="240" height="320" viewBox="0 0 240 320" className="relative z-10">
-                <defs><linearGradient id="grd" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#D4AF37"/><stop offset="100%" stopColor="#B8860B"/></linearGradient></defs>
-                {/* Crown */}
-                <path d="M95 45 L105 25 L120 15 L135 25 L145 45Z" fill="url(#grd)" opacity="0.9"/>
-                <circle cx="120" cy="48" r="28" fill="#c8a06a"/>
-                <circle cx="112" cy="44" r="3.5" fill="#1a0a00"/>
-                <circle cx="128" cy="44" r="3.5" fill="#1a0a00"/>
-                <path d="M115 56 Q120 62 125 56" fill="none" stroke="#1a0a00" strokeWidth="1.5"/>
-                {/* Aura */}
-                <circle cx="120" cy="48" r="42" fill="none" stroke="url(#grd)" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.7"/>
-                {/* Body / poshak */}
-                <path d="M75 76 Q70 155 65 248 Q120 265 175 248 Q170 155 165 76Z" fill="#570000"/>
-                {/* Gold border on dress */}
-                <path d="M75 76 Q70 155 65 248" fill="none" stroke="#D4AF37" strokeWidth="2.5"/>
-                <path d="M165 76 Q170 155 175 248" fill="none" stroke="#D4AF37" strokeWidth="2.5"/>
-                <path d="M65 140 Q120 130 175 140" fill="none" stroke="#D4AF37" strokeWidth="1.5" opacity="0.6"/>
-                <path d="M63 190 Q120 180 177 190" fill="none" stroke="#D4AF37" strokeWidth="1.5" opacity="0.6"/>
-                {/* Embroidery dots */}
-                {[[120,105],[105,120],[135,120],[120,135],[100,150],[140,150],[120,165]].map(([x,y],i)=>(
-                  <circle key={i} cx={x} cy={y} r="3.5" fill="#D4AF37" opacity="0.85"/>
-                ))}
-                {/* Flute */}
-                <rect x="138" y="68" width="3.5" height="48" rx="1.75" fill="#8d4f11" transform="rotate(-18 138 68)"/>
-              </svg>
+              <img src="https://i.ibb.co/Vpm1HCBW/IMG-20260709-222502-png.png" className="object-fill w-full rounded-2xl h-full"  alt="IMG-20260709-222502-png" border="0" /> 
               <div className="absolute bottom-6 text-center w-full">
                 <p className="font-body text-[10px] tracking-[0.2em] uppercase text-primary/50">✦ Radha Krishna Poshak ✦</p>
               </div>
@@ -139,6 +115,7 @@ export default function HomePage() {
           {categories.map(cat => (
             <Link key={cat.value} to={`/products?category=${cat.value}`}
               className={`group relative h-72 bg-gradient-to-br ${cat.color} rounded-xl overflow-hidden border border-gold/15 card-hover flex flex-col justify-end p-6`}>
+              <img src= {`${cat.imageurl}`} className="object-none w-full rounded-2xl "   border="0" /> 
               <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity" style={{ background: cat.accent }}/>
               <h3 className="font-display text-xl font-bold mb-1" style={{ color: cat.accent }}>{cat.title}</h3>
               <p className="font-body text-xs text-muted mb-3">{cat.desc}</p>

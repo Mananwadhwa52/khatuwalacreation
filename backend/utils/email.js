@@ -28,4 +28,21 @@ const orderConfirmationHtml = (order) => `
   <p style="color:#570000;font-style:italic;">Jai Shree Radhe Krishna 🌸</p>
 </div>`;
 
-module.exports = { sendMail, orderConfirmationHtml };
+const passwordResetHtml = (name, resetUrl) => `
+<!DOCTYPE html>
+<html><body style="font-family:Arial,sans-serif;background:#f9f6f1;padding:40px 0;">
+<div style="max-width:500px;margin:0 auto;background:#fff;border-radius:12px;padding:32px;border:1px solid #e8dcc8;">
+  <h2 style="color:#570000;margin-bottom:8px;">Password Reset Request</h2>
+  <p style="color:#666;">Hi ${name || 'there'},</p>
+  <p style="color:#666;">You requested a password reset for your Khatu Walas Creation account. Click the button below to set a new password:</p>
+  <div style="text-align:center;margin:24px 0;">
+    <a href="${resetUrl}" style="background:#570000;color:#fff;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:bold;display:inline-block;">Reset Password</a>
+  </div>
+  <p style="color:#999;font-size:12px;">This link expires in 30 minutes. If you didn't request this, please ignore this email.</p>
+  <hr style="border:none;border-top:1px solid #e8dcc8;margin:20px 0;"/>
+  <p style="color:#999;font-size:11px;text-align:center;">🙏 Khatu Walas Creation</p>
+</div>
+</body></html>
+`;
+
+module.exports = { sendMail, orderConfirmationHtml, passwordResetHtml };

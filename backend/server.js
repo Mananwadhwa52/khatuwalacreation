@@ -59,6 +59,7 @@ app.use('/api/orders',   require('./routes/orders'));
 app.use('/api/payment',  require('./routes/payment'));
 app.use('/api/contact',  require('./routes/contact'));
 app.use('/api/reviews',  require('./routes/reviews'));
+app.use('/api/coupons', require('./routes/coupons'));
 
 // ── Health ──
 app.get('/', (_, res) => res.json({ status: 'ok', message: '🙏 Khatu Walas API running' }));

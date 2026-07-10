@@ -79,7 +79,7 @@ router.put('/:id/status', protect, adminOnly, asyncHandler(async (req, res) => {
 // Dashboard stats (admin)
 router.get('/admin/stats', protect, adminOnly, asyncHandler(async (req, res) => {
   const [totalRevenue, totalOrders, pendingOrders, deliveredOrders] = await Promise.all([
-    Order.aggregate([{ $match: { paymentStatus: 'paid' } }, { $group: { _id: null, total: { $sum: '$totalPrice' } } }]),
+    Order.aggregate([{ $match: { paymentStatus: 'paid', orderStatus: { $nin: ['cancelled', 'refunded'] } } }, { $group: { _id: null, total: { $sum: '$totalPrice' } } }]),
     Order.countDocuments(),
     Order.countDocuments({ orderStatus: { $in: ['placed','confirmed','processing'] } }),
     Order.countDocuments({ orderStatus: 'delivered' }),
@@ -89,6 +89,16 @@ router.get('/admin/stats', protect, adminOnly, asyncHandler(async (req, res) => 
     revenue: totalRevenue[0]?.total || 0,
     totalOrders, pendingOrders, deliveredOrders,
   });
+}));
+
+// Delete cancelled order (admin only)
+router.delete('/:id', protect, adminOnly, asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+  if (order.orderStatus !== 'cancelled')
+    return res.status(400).json({ success: false, message: 'Only cancelled orders can be deleted' });
+  await order.deleteOne();
+  res.json({ success: true, message: 'Order deleted' });
 }));
 
 module.exports = router;

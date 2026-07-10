@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Eye, ChevronDown } from 'lucide-react'
+import { Eye, ChevronDown, Trash2 } from 'lucide-react'
+import toast from 'react-hot-toast'
 import api from '../../utils/api'
 
 const STATUS_COLORS = {
@@ -28,6 +29,17 @@ export default function AdminOrders() {
   }
 
   useEffect(() => { fetchOrders() }, [page, statusFilter])
+
+  const handleDelete = async (id) => {
+    if (!confirm('Are you sure you want to permanently delete this cancelled order?')) return
+    try {
+      await api.delete(`/orders/${id}`)
+      toast.success('Order deleted successfully')
+      fetchOrders()
+    } catch (e) {
+      toast.error(e.response?.data?.message || 'Failed to delete order')
+    }
+  }
 
   return (
     <div className="space-y-5">
@@ -83,9 +95,16 @@ export default function AdminOrders() {
                   </td>
                   <td className="px-4 py-3 font-body text-xs text-gray-400">{new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
                   <td className="px-4 py-3">
-                    <Link to={`/admin/orders/${o._id}`} className="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 transition">
-                      <Eye size={13}/>
-                    </Link>
+                    <div className="flex gap-2">
+                      <Link to={`/admin/orders/${o._id}`} className="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 transition">
+                        <Eye size={13}/>
+                      </Link>
+                      {o.orderStatus === 'cancelled' && (
+                        <button onClick={() => handleDelete(o._id)} className="w-8 h-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-100 transition">
+                          <Trash2 size={13}/>
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

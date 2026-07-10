@@ -16,6 +16,7 @@ import OrdersPage     from './pages/OrdersPage'
 import OrderDetail    from './pages/OrderDetail'
 import LoginPage      from './pages/LoginPage'
 import RegisterPage   from './pages/RegisterPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 import ProfilePage    from './pages/ProfilePage'
 import WishlistPage   from './pages/WishlistPage'
 import ContactPage    from './pages/ContactPage'
@@ -76,6 +77,7 @@ export default function App() {
           <Route path="/policies/terms" element={<PublicLayout><TermsPage/></PublicLayout>}/>
           <Route path="/login" element={<PublicLayout><LoginPage/></PublicLayout>}/>
           <Route path="/register" element={<PublicLayout><RegisterPage/></PublicLayout>}/>
+          <Route path="/reset-password/:token" element={<PublicLayout><ResetPasswordPage/></PublicLayout>}/>
 
           {/* Protected */}
           <Route path="/checkout" element={<ProtectedRoute><PublicLayout><CheckoutPage/></PublicLayout></ProtectedRoute>}/>

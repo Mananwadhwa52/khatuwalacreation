@@ -25,6 +25,8 @@ const userSchema = new mongoose.Schema({
   loginAttempts: { type: Number, default: 0 },
   lockUntil:     { type: Date },
   lastLogin:     { type: Date },
+  resetPasswordToken:  { type: String },
+  resetPasswordExpire: { type: Date },
 }, { timestamps: true });
 
 // Virtual: check if account is currently locked
