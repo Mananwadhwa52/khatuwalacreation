@@ -7,12 +7,13 @@ const { upload, cloudinary } = require('../middleware/cloudinary');
 
 // GET all (public)
 router.get('/', asyncHandler(async (req, res) => {
-  const { category, featured, search, page = 1, limit = 12, sort = 'newest' } = req.query;
+  const { category, featured, search, size, page = 1, limit = 12, sort = 'newest' } = req.query;
   const query = {};
   if (category) query.category = category;
   if (featured === 'true') query.featured = true;
   if (req.query.inStock === 'true') query.inStock = true;
   if (search) query.$text = { $search: search };
+  if (size) query['sizes.size'] = size;
 
   const sortMap = { newest: { createdAt: -1 }, priceAsc: { price: 1 }, priceDesc: { price: -1 }, popular: { sold: -1 } };
   const skip = (Number(page) - 1) * Number(limit);

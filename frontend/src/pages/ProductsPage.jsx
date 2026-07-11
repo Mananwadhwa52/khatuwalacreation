@@ -29,6 +29,7 @@ export default function ProductsPage() {
 
   const category = sp.get('category') || ''
   const search   = sp.get('search')   || ''
+  const size     = sp.get('size')     || ''
   const sort     = sp.get('sort')     || 'newest'
   const page     = Number(sp.get('page') || 1)
 
@@ -44,6 +45,7 @@ export default function ProductsPage() {
     const params = new URLSearchParams({ sort, page, limit: 12 })
     if (category) params.set('category', category)
     if (search)   params.set('search', search)
+    if (size)     params.set('size', size)
     api.get(`/products?${params}`)
       .then(r => { setProducts(r.data.products); setTotal(r.data.total); setPages(r.data.pages) })
       .finally(() => setLoading(false))
@@ -74,22 +76,26 @@ export default function ProductsPage() {
             ))}
           </div>
 
-          {/* Sort */}
-          <div className="ml-auto relative">
-            <select value={sort} onChange={e => setParam('sort', e.target.value)}
-              className="font-body text-xs font-semibold tracking-widest uppercase border border-gold/30 rounded px-3 py-2 bg-white text-muted focus:outline-none focus:border-gold appearance-none pr-7 cursor-pointer">
-              {SORTS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-            </select>
-            <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted pointer-events-none"/>
+          {/* Sort & Size */}
+          <div className="ml-auto flex items-center gap-3">
+            <input defaultValue={size} onKeyDown={e => { if(e.key === 'Enter') setParam('size', e.target.value) }} onBlur={e => setParam('size', e.target.value)} placeholder="Size..." className="font-body text-xs font-semibold tracking-widest uppercase border border-gold/30 rounded px-3 py-2 bg-white text-muted focus:outline-none focus:border-gold w-24" />
+            <div className="relative">
+              <select value={sort} onChange={e => setParam('sort', e.target.value)}
+                className="font-body text-xs font-semibold tracking-widest uppercase border border-gold/30 rounded px-3 py-2 bg-white text-muted focus:outline-none focus:border-gold appearance-none pr-7 cursor-pointer">
+                {SORTS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+              </select>
+              <ChevronDown size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted pointer-events-none"/>
+            </div>
           </div>
         </div>
 
         {/* Active filters */}
-        {(category || search) && (
+        {(category || search || size) && (
           <div className="flex items-center gap-2 mb-6 flex-wrap">
             <span className="font-body text-xs text-muted">Filters:</span>
             {category && <button onClick={() => setParam('category','')} className="flex items-center gap-1 bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full hover:bg-primary/20 transition">{category} <X size={10}/></button>}
             {search && <button onClick={() => { const n = new URLSearchParams(sp); n.delete('search'); setSp(n) }} className="flex items-center gap-1 bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full hover:bg-primary/20 transition">"{search}" <X size={10}/></button>}
+            {size && <button onClick={() => setParam('size','')} className="flex items-center gap-1 bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full hover:bg-primary/20 transition">Size: {size} <X size={10}/></button>}
           </div>
         )}
 

@@ -9,11 +9,13 @@ export function CartProvider({ children }) {
   useEffect(() => { localStorage.setItem('kw_cart', JSON.stringify(cart)) }, [cart])
 
   const addToCart = (product, qty = 1, size = '') => {
+    const sizeObj = typeof product.sizes?.[0] === 'object' ? product.sizes.find(s => s.size === size) : null;
+    const finalPrice = sizeObj ? sizeObj.price : product.price;
     setCart(prev => {
       const key = `${product._id}-${size}`
       const ex = prev.find(i => `${i._id}-${i.size}` === key)
       if (ex) return prev.map(i => `${i._id}-${i.size}` === key ? { ...i, qty: i.qty + qty } : i)
-      return [...prev, { _id: product._id, name: product.name, price: product.price, image: product.images?.[0]?.url, size, qty }]
+      return [...prev, { _id: product._id, name: product.name, price: finalPrice, image: product.images?.[0]?.url, size, qty }]
     })
     setIsOpen(true)
   }

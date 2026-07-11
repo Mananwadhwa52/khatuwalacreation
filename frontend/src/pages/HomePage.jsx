@@ -115,7 +115,7 @@ export default function HomePage() {
           {categories.map(cat => (
             <Link key={cat.value} to={`/products?category=${cat.value}`}
               className={`group relative h-72 bg-gradient-to-br ${cat.color} rounded-xl overflow-hidden border border-gold/15 card-hover flex flex-col justify-end p-6`}>
-              <img src= {`${cat.imageurl}`} className="object-none w-full rounded-2xl "   border="0" /> 
+              <img src= {`${cat.imageurl}`} className="object-contain w-full rounded-2xl "   border="0" /> 
               <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity" style={{ background: cat.accent }}/>
               <h3 className="font-display text-xl font-bold mb-1" style={{ color: cat.accent }}>{cat.title}</h3>
               <p className="font-body text-xs text-muted mb-3">{cat.desc}</p>

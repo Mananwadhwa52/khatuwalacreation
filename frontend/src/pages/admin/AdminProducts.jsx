@@ -4,7 +4,7 @@ import api from '../../utils/api'
 import toast from 'react-hot-toast'
 
 const CATS = ['radha-krishna','laddu-gopal','accessories','puja-items','khatu-shyam-baba']
-const EMPTY = { name:'', description:'', price:'', mrp:'', category:'radha-krishna', subcategory:'', badges:'', sizes:'', inStock:true, featured:false, stockCount:'' }
+const EMPTY = { name:'', description:'', price:'', mrp:'', category:'radha-krishna', subcategory:'', badges:'', sizes:[], inStock:true, featured:false, stockCount:'' }
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([])
@@ -40,7 +40,7 @@ export default function AdminProducts() {
     setForm({
       name: p.name, description: p.description, price: p.price, mrp: p.mrp||'',
       category: p.category, subcategory: p.subcategory||'',
-      badges: p.badges?.join(', ')||'', sizes: p.sizes?.join(', ')||'',
+      badges: p.badges?.join(', ')||'', sizes: (p.sizes || []).map(s => typeof s === 'string' ? { size: s, price: p.price, mrp: p.mrp } : s),
       inStock: p.inStock, featured: p.featured, stockCount: p.stockCount||''
     })
     setFiles([]); setPreviews([])
@@ -60,7 +60,7 @@ export default function AdminProducts() {
       const fd = new FormData()
       Object.entries(form).forEach(([k,v]) => {
         if (k === 'badges') fd.append(k, JSON.stringify(v.split(',').map(s=>s.trim()).filter(Boolean)))
-        else if (k === 'sizes') fd.append(k, JSON.stringify(v.split(',').map(s=>s.trim()).filter(Boolean)))
+        else if (k === 'sizes') fd.append(k, JSON.stringify(v))
         else fd.append(k, v)
       })
       files.forEach(f => fd.append('images', f))
@@ -206,9 +206,22 @@ export default function AdminProducts() {
                   <label className="font-body text-xs font-bold uppercase tracking-widest text-gray-500 block mb-1.5">Stock Count</label>
                   <input type="number" value={form.stockCount} onChange={e=>setForm(f=>({...f,stockCount:e.target.value}))} className="input-field" placeholder="50"/>
                 </div>
-                <div>
-                  <label className="font-body text-xs font-bold uppercase tracking-widest text-gray-500 block mb-1.5">Sizes (comma separated)</label>
-                  <input value={form.sizes} onChange={e=>setForm(f=>({...f,sizes:e.target.value}))} className="input-field" placeholder="0, 1, 2, 3, 4, 5"/>
+                <div className="sm:col-span-2">
+                  <label className="font-body text-xs font-bold uppercase tracking-widest text-gray-500 mb-1.5 flex justify-between items-center">
+                    <span>Sizes</span>
+                    <button type="button" onClick={() => setForm(f => ({ ...f, sizes: [...f.sizes, { size: '', price: '', mrp: '' }] }))} className="text-primary hover:underline text-[10px] normal-case">Add Size</button>
+                  </label>
+                  <div className="space-y-2">
+                    {form.sizes.map((s, i) => (
+                      <div key={i} className="flex gap-2 items-center">
+                        <input value={s.size} onChange={e => { const ns = [...form.sizes]; ns[i].size = e.target.value; setForm(f => ({ ...f, sizes: ns })) }} className="input-field flex-1" placeholder="Size Name (e.g. S)"/>
+                        <input type="number" value={s.price} onChange={e => { const ns = [...form.sizes]; ns[i].price = e.target.value; setForm(f => ({ ...f, sizes: ns })) }} className="input-field w-24" placeholder="Price"/>
+                        <input type="number" value={s.mrp} onChange={e => { const ns = [...form.sizes]; ns[i].mrp = e.target.value; setForm(f => ({ ...f, sizes: ns })) }} className="input-field w-24" placeholder="MRP"/>
+                        <button type="button" onClick={() => { const ns = form.sizes.filter((_, idx) => idx !== i); setForm(f => ({ ...f, sizes: ns })) }} className="text-red-500 p-2"><X size={16}/></button>
+                      </div>
+                    ))}
+                    {form.sizes.length === 0 && <p className="text-xs text-gray-400 font-body">No sizes added.</p>}
+                  </div>
                 </div>
                 <div className="sm:col-span-2">
                   <label className="font-body text-xs font-bold uppercase tracking-widest text-gray-500 block mb-1.5">Badges (comma separated)</label>

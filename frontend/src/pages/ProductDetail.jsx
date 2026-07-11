@@ -67,7 +67,10 @@ export default function ProductDetail() {
     </div>
   )
 
-  const discount = product.mrp && product.mrp > product.price ? Math.round((product.mrp - product.price) / product.mrp * 100) : null
+  const selectedSizeObj = product.sizes?.length && typeof product.sizes[0] === 'object' ? product.sizes.find(s => s.size === size) : null;
+  const displayPrice = selectedSizeObj ? selectedSizeObj.price : product.price;
+  const displayMrp = selectedSizeObj && selectedSizeObj.mrp ? selectedSizeObj.mrp : product.mrp;
+  const discount = displayMrp && displayMrp > displayPrice ? Math.round((displayMrp - displayPrice) / displayMrp * 100) : null
 
   return (
     <div className="min-h-screen mandala-bg page-enter">
@@ -125,9 +128,9 @@ export default function ProductDetail() {
 
             {/* Price */}
             <div className="flex items-center gap-3 mb-6">
-              <span className="font-display text-3xl font-bold text-primary">₹{product.price.toLocaleString()}</span>
-              {product.mrp && product.mrp > product.price && <>
-                <span className="font-body text-lg text-muted line-through">₹{product.mrp.toLocaleString()}</span>
+              <span className="font-display text-3xl font-bold text-primary">₹{displayPrice.toLocaleString()}</span>
+              {displayMrp && displayMrp > displayPrice && <>
+                <span className="font-body text-lg text-muted line-through">₹{displayMrp.toLocaleString()}</span>
                 <span className="badge bg-green-100 text-green-700">{discount}% OFF</span>
               </>}
             </div>
@@ -144,9 +147,12 @@ export default function ProductDetail() {
               <div className="mb-5">
                 <label className="font-body text-xs font-bold tracking-widest uppercase text-primary block mb-2">Select Size</label>
                 <div className="flex flex-wrap gap-2">
-                  {product.sizes.map(s => (
-                    <button key={s} onClick={() => setSize(s)} className={`w-12 h-10 rounded border font-body text-sm font-semibold transition ${size === s ? 'bg-primary text-white border-primary' : 'border-gold/40 text-muted hover:border-primary hover:text-primary'}`}>{s}</button>
-                  ))}
+                  {product.sizes.map((s, i) => {
+                    const sn = typeof s === 'string' ? s : s.size;
+                    return (
+                      <button key={i} onClick={() => setSize(sn)} className={`px-4 h-10 rounded border font-body text-sm font-semibold transition ${size === sn ? 'bg-primary text-white border-primary' : 'border-gold/40 text-muted hover:border-primary hover:text-primary'}`}>{sn}</button>
+                    )
+                  })}
                 </div>
               </div>
             )}

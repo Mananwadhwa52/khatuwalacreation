@@ -9,7 +9,11 @@ const productSchema = new mongoose.Schema({
   subcategory: { type: String, trim: true },
   images:      [{ url: String, public_id: String }],
   badges:      [String],
-  sizes:       [String],
+  sizes:       [{
+    size: { type: String, required: true },
+    price: { type: Number, required: true, min: 0 },
+    mrp: { type: Number, min: 0 }
+  }],
   inStock:     { type: Boolean, default: true },
   featured:    { type: Boolean, default: false },
   stockCount:  { type: Number, default: 0 },
