@@ -23,7 +23,8 @@ khatuwala-full/
 │   │   ├── Order.js                  # Order schema with payment, shipping
 │   │   ├── Review.js                 # Product review schema
 │   │   ├── Contact.js                # Contact form submissions
-│   │   └── Coupon.js                 # Discount coupon schema
+│   │   ├── Coupon.js                 # Discount coupon schema
+│   │   └── Settings.js               # Global app settings (COD, collections)
 │   │
 │   ├── routes/
 │   │   ├── auth.js                   # Login, register, profile, wishlist
@@ -31,7 +32,8 @@ khatuwala-full/
 │   │   ├── orders.js                 # Order management, tracking
 │   │   ├── payment.js                # Razorpay integration
 │   │   ├── reviews.js                # Product reviews
-│   │   └── contact.js                # Contact form
+│   │   ├── contact.js                # Contact form
+│   │   └── settings.js               # Global settings API
 │   │
 │   ├── middleware/
 │   │   ├── auth.js                   # JWT auth, admin guard, super admin, audit logging
@@ -89,7 +91,8 @@ khatuwala-full/
 │   │   │       ├── AdminOrderDetail.jsx  # Update order status
 │   │   │       ├── AdminContacts.jsx     # View messages
 │   │   │       ├── AdminCoupons.jsx      # Coupon management
-│   │   │       └── AdminUsers.jsx        # User list
+│   │   │       ├── AdminUsers.jsx        # User list
+│   │   │       └── AdminSettings.jsx     # Global app settings (COD, categories)
 │   │   │
 │   │   ├── context/
 │   │   │   ├── AuthContext.jsx       # Authentication state
@@ -144,6 +147,7 @@ khatuwala-full/
 - ✅ View customer messages
 - ✅ User management (suspend/activate/unlock)
 - ✅ Coupon management (basic structure)
+- ✅ Global settings (Toggle COD, update Home Page collections)
 - ✅ Super admin role for critical operations
 - ✅ Admin action audit logging (IP, user-agent, timestamp)
 
@@ -584,7 +588,7 @@ Or connect GitHub repo to Vercel dashboard.
 
 For issues or questions:
 - Instagram: [@khatuwalascreation](https://instagram.com/khatuwalascreation)
-- Email: hello@khatuwalascreation.com
+- Email: khatuwalascreation@gmail.com
 
 ---
 

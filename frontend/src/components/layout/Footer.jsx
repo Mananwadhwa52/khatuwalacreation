@@ -19,10 +19,10 @@ export default function Footer() {
               <a href="https://instagram.com/khatuwalascreation" target="_blank" rel="noreferrer" className="w-8 h-8 border border-gold/30 rounded flex items-center justify-center hover:border-gold transition text-gold/80 hover:text-gold">
                 <Instagram size={14}/>
               </a>
-              <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="w-8 h-8 border border-gold/30 rounded flex items-center justify-center hover:border-gold transition text-gold/80 hover:text-gold">
+              <a href="https://wa.me/918288870275" target="_blank" rel="noreferrer" className="w-8 h-8 border border-gold/30 rounded flex items-center justify-center hover:border-gold transition text-gold/80 hover:text-gold">
                 <MessageCircle size={14}/>
               </a>
-              <a href="mailto:khatuwalacreation.com" className="w-8 h-8 border border-gold/30 rounded flex items-center justify-center hover:border-gold transition text-gold/80 hover:text-gold">
+              <a href="mailto:khatuwalascreation@gmail.com" className="w-8 h-8 border border-gold/30 rounded flex items-center justify-center hover:border-gold transition text-gold/80 hover:text-gold">
                 <Mail size={14}/>
               </a>
             </div>
@@ -57,13 +57,13 @@ export default function Footer() {
           <div>
             <h4 className="font-body text-[10px] font-bold tracking-[0.2em] uppercase text-gold mb-4">Contact Us</h4>
             <div className="flex flex-col gap-3">
-              <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="flex items-start gap-2 opacity-65 hover:opacity-100 transition">
+              <a href="https://wa.me/918288870275" target="_blank" rel="noreferrer" className="flex items-start gap-2 opacity-65 hover:opacity-100 transition">
                 <Phone size={13} className="mt-0.5 flex-shrink-0 text-gold"/>
-                <span className="font-body text-xs">+91 98765 43210</span>
+                <span className="font-body text-xs">+91 82888 70275</span>
               </a>
-              <a href="mailto:hello@khatuwalascreation.com" className="flex items-start gap-2 opacity-65 hover:opacity-100 transition">
+              <a href="mailto:khatuwalascreation@gmail.com" className="flex items-start gap-2 opacity-65 hover:opacity-100 transition">
                 <Mail size={13} className="mt-0.5 flex-shrink-0 text-gold"/>
-                <span className="font-body text-xs">hello@khatuwalascreation.com</span>
+                <span className="font-body text-xs">khatuwalascreation@gmail.com</span>
               </a>
               <div className="flex items-start gap-2 opacity-65">
                 <MapPin size={13} className="mt-0.5 flex-shrink-0 text-gold"/>

@@ -27,8 +27,8 @@ app.use('/api/contact', rateLimit({
 // ── CORS (hardened) ──
 const allowedOrigins = [
   process.env.FRONTEND_URL,          // From env (should be https://mananwadhwa.in on Render)
-  'https://mananwadhwa.in',          // Live Domain (hardcoded as safety net)
-  'https://www.mananwadhwa.in',      // www version
+  'https://khatuwalascreation.in',          // Live Domain (hardcoded as safety net)
+  'https://www.khatuwalascreation.in',      // www version
   'https://khatuwalacreation.onrender.com', // Render backend itself
   'http://localhost:5173',           // Local development
   'http://localhost:5000',           // Local backend
@@ -60,6 +60,7 @@ app.use('/api/payment',  require('./routes/payment'));
 app.use('/api/contact',  require('./routes/contact'));
 app.use('/api/reviews',  require('./routes/reviews'));
 app.use('/api/coupons', require('./routes/coupons'));
+app.use('/api/settings', require('./routes/settings'));
 
 // ── Health ──
 app.get('/', (_, res) => res.json({ status: 'ok', message: '🙏 Khatu Walas API running' }));

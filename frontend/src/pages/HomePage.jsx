@@ -4,10 +4,10 @@ import { ArrowRight, Star, Shield, Truck, RefreshCw, Package } from 'lucide-reac
 import api from '../utils/api'
 import ProductCard from '../components/product/ProductCard'
 
-const categories = [
+const defaultCategories = [
   { title: 'Radha Krishna', value: 'radha-krishna', desc: 'Poshaks, Shringar & Jewellery Sets', color: 'from-rose-100 to-pink-50', accent: '#570000' , imageurl: 'https://i.ibb.co/DPkgMHZx/file-000000007f847208ada30b449c72a0f1.png' },
-  { title: 'Laddu Gopal',   value: 'laddu-gopal',   desc: 'Size 0 to 10 — All Seasons',      color: 'from-amber-100 to-yellow-50', accent: '#8d4f11' , imageurl: 'https://i.ibb.co/gMngmcBQ/file-00000000b024720896937019d17cf461.png ' },
-  { title: 'Accessories',   value: 'accessories',   desc: 'Crowns, Flutes, Swings & More',   color: 'from-teal-100 to-cyan-50',  accent: '#002c2c', imageurl: 'https://i.ibb.co/VYt3fFJs/file-000000008cc872089a2fb7a7fbbdf1a7.png ' },
+  { title: 'Laddu Gopal',   value: 'laddu-gopal',   desc: 'Size 0 to 10 — All Seasons',      color: 'from-amber-100 to-yellow-50', accent: '#8d4f11' , imageurl: 'https://i.ibb.co/gMngmcBQ/file-00000000b024720896937019d17cf461.png' },
+  { title: 'Accessories',   value: 'accessories',   desc: 'Crowns, Flutes, Swings & More',   color: 'from-teal-100 to-cyan-50',  accent: '#002c2c', imageurl: 'https://i.ibb.co/VYt3fFJs/file-000000008cc872089a2fb7a7fbbdf1a7.png' },
   { title: 'Puja Items',    value: 'puja-items',    desc: 'Diyas, Incense & Ritual Items',   color: 'from-purple-100 to-violet-50', accent: '#3b0764', imageurl: 'https://i.ibb.co/81gsr1M/file-0000000068ac72089454ff1afa2e4d4f.png' },
   { title: 'Khatu Shyam Baba', value: 'khatu-shyam-baba', desc: 'Idols, Poshaks & Devotional Items', color: 'from-orange-100 to-amber-50', accent: '#9a3412', imageurl: 'https://i.ibb.co/C3D1ykBd/IMG-20260709-223701-png.png' },
 ]
@@ -25,10 +25,19 @@ function Skeleton() {
 export default function HomePage() {
   const [featured, setFeatured] = useState([])
   const [loading, setLoading] = useState(true)
+  const [categories, setCategories] = useState(defaultCategories)
 
   useEffect(() => {
     api.get('/products?featured=true&limit=8')
       .then(r => setFeatured(r.data.products))
+      .catch(() => {})
+
+    api.get('/settings')
+      .then(r => {
+        if (r.data?.collections?.length > 0) {
+          setCategories(r.data.collections)
+        }
+      })
       .finally(() => setLoading(false))
   }, [])
 
@@ -114,14 +123,18 @@ export default function HomePage() {
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {categories.map(cat => (
             <Link key={cat.value} to={`/products?category=${cat.value}`}
-              className={`group relative h-72 bg-gradient-to-br ${cat.color} rounded-xl overflow-hidden border border-gold/15 card-hover flex flex-col justify-end p-6`}>
-              <img src= {`${cat.imageurl}`} className="object-contain w-full rounded-2xl "   border="0" /> 
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity" style={{ background: cat.accent }}/>
-              <h3 className="font-display text-xl font-bold mb-1" style={{ color: cat.accent }}>{cat.title}</h3>
-              <p className="font-body text-xs text-muted mb-3">{cat.desc}</p>
-              <span className="font-body text-[11px] font-bold tracking-widest uppercase flex items-center gap-1" style={{ color: '#D4AF37' }}>
-                Explore <ArrowRight size={12}/>
-              </span>
+              className={`group relative h-80 bg-gradient-to-br ${cat.color || 'from-gray-100 to-gray-50'} rounded-xl overflow-hidden border border-gold/15 card-hover flex flex-col p-6`}>
+              <div className="flex-1 w-full relative mb-4 flex items-center justify-center min-h-[140px]">
+                <img src={`${cat.imageurl}`} className="absolute inset-0 w-full h-full object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-500" alt={cat.title} /> 
+              </div>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity" style={{ background: cat.accent || '#D4AF37' }}/>
+              <div className="relative z-10 mt-auto">
+                <h3 className="font-display text-xl font-bold mb-1" style={{ color: cat.accent || '#D4AF37' }}>{cat.title}</h3>
+                <p className="font-body text-xs text-muted mb-3 line-clamp-2">{cat.desc}</p>
+                <span className="font-body text-[11px] font-bold tracking-widest uppercase flex items-center gap-1" style={{ color: '#D4AF37' }}>
+                  Explore <ArrowRight size={12}/>
+                </span>
+              </div>
             </Link>
           ))}
         </div>

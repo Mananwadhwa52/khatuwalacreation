@@ -36,6 +36,7 @@ import AdminOrderDetail from './pages/admin/AdminOrderDetail'
 import AdminContacts  from './pages/admin/AdminContacts'
 import AdminCoupons   from './pages/admin/AdminCoupons'
 import AdminUsers     from './pages/admin/AdminUsers'
+import AdminSettings  from './pages/admin/AdminSettings'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -96,6 +97,7 @@ export default function App() {
             <Route path="contacts" element={<AdminContacts/>}/>
             <Route path="coupons" element={<AdminCoupons/>}/>
             <Route path="users" element={<AdminUsers/>}/>
+            <Route path="settings" element={<AdminSettings/>}/>
           </Route>
 
           <Route path="*" element={<PublicLayout><div className="min-h-screen flex items-center justify-center"><div className="text-center"><h1 className="font-display text-6xl text-primary mb-4">404</h1><p className="font-body text-muted mb-6">Page not found</p><a href="/" className="btn-primary">Go Home</a></div></div></PublicLayout>}/>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
@@ -32,6 +32,13 @@ export default function CheckoutPage() {
   const [couponApplied, setCouponApplied] = useState(null)
   const [couponLoading, setCouponLoading] = useState(false)
   const [placing, setPlacing] = useState(false)
+  const [settings, setSettings] = useState({ codEnabled: true })
+
+  useEffect(() => {
+    api.get('/settings').then(res => {
+      if (res.data) setSettings(res.data)
+    }).catch(() => {})
+  }, [])
 
   const discount = couponApplied?.discount || 0
   const finalTotal = Math.max(total + shipping - discount, 0)
@@ -210,7 +217,7 @@ export default function CheckoutPage() {
                 <div className="flex flex-col gap-3 mb-6">
                   {[
                     { value: 'razorpay', label: 'Pay Online', desc: 'UPI, Cards, Net Banking via Razorpay', icon: <Shield size={20} className="text-blue-600"/> },
-                    { value: 'cod',      label: 'Cash on Delivery', desc: 'Pay when your order arrives', icon: <Truck size={20} className="text-green-600"/> },
+                    ...(settings.codEnabled ? [{ value: 'cod',      label: 'Cash on Delivery', desc: 'Pay when your order arrives', icon: <Truck size={20} className="text-green-600"/> }] : []),
                   ].map(opt => (
                     <label key={opt.value} className={`flex items-center gap-4 p-4 rounded-lg border-2 cursor-pointer transition ${paymentMethod === opt.value ? 'border-gold bg-gold/5' : 'border-gray-200 hover:border-gold/40'}`}>
                       <input type="radio" name="payment" value={opt.value} checked={paymentMethod === opt.value} onChange={e => setPaymentMethod(e.target.value)} className="accent-primary"/>

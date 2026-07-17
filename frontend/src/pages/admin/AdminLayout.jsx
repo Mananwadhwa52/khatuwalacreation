@@ -10,6 +10,7 @@ const NAV = [
   { to: '/admin/contacts',  label: 'Messages',  icon: <MessageSquare size={17}/> },
   { to: '/admin/coupons',   label: 'Coupons',   icon: <Tag size={17}/> },
   { to: '/admin/users',     label: 'Users',     icon: <Users size={17}/> },
+  { to: '/admin/settings',  label: 'Settings',  icon: <LayoutDashboard size={17}/> },
 ]
 
 export default function AdminLayout() {
